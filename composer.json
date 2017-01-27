@@ -2,7 +2,7 @@
     "name": "pre/short-closures",
     "require": {
         "php": "^7.0",
-        "pre/plugin": "dev-master"
+        "pre/plugin": "^0.1"
     },
     "autoload": {
         "files": [
