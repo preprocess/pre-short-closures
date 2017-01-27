@@ -1,0 +1,14 @@
+{
+    "name": "pre/short-closures",
+    "require": {
+        "php": "^7.0",
+        "pre/plugin": "dev-master"
+    },
+    "autoload": {
+        "files": [
+            "functions.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
