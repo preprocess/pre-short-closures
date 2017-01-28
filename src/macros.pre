@@ -1,0 +1,12 @@
+<?php
+
+macro {
+    (···parameters) => { ···body }
+} >> {
+    call_user_func(function($context) {
+        return function(···parameters) use ($context) {
+            extract($context);
+            ···body
+        };
+    }, get_defined_vars());
+}

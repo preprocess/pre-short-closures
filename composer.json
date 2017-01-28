@@ -2,12 +2,20 @@
     "name": "pre/short-closures",
     "require": {
         "php": "^7.0",
-        "pre/plugin": "^0.1"
+        "pre/plugin": "^0.2"
     },
     "autoload": {
         "files": [
-            "functions.php"
+            "src/bootstrap.php"
         ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pre\\Tests\\": "tests"
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
