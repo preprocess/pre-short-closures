@@ -8,5 +8,5 @@ macro {
             extract($context);
             ···body
         };
-    }, get_defined_vars());
+    }, get_defined_vars())
 }
