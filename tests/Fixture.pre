@@ -7,6 +7,6 @@ class Fixture
     public function foo($end) {
         return ($name) => {
             return "hello {$name}{$end}";
-        }
+        };
     }
 }
