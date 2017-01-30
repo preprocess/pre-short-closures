@@ -1,6 +1,6 @@
 <?php
 
-namespace Pre\Tests;
+namespace Pre\ShortClosures;
 
 use PHPUnit\Framework\TestCase;
 
@@ -10,7 +10,7 @@ class MacroTest extends TestCase
 {
     public function testShortClosures()
     {
-        $fixture = new Fixture();
+        $fixture = new Fixture\Fixture();
 
         $cb = $fixture->foo("!");
 
@@ -20,8 +20,8 @@ class MacroTest extends TestCase
     public function testNestedClosures()
     {
         $base = getenv("PRE_BASE_DIR");
-        $pre = __DIR__ . "/nested.pre";
-        $php = __DIR__ . "/nested.php";
+        $pre = __DIR__ . "/Fixture/nested.pre";
+        $php = __DIR__ . "/Fixture/nested.php";
 
         process($base, $pre, $php);
 

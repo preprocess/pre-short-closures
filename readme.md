@@ -1,36 +1,6 @@
 # Pre Short Closures
 
-This adds short closure macros, to allow much more concise closure syntax, similar to modern JS.
-
-## Using
-
-The first step is to require this repository in your plugin repository:
-
-```
-composer require pre/short-closures
-```
-
-Then, you can replace longer closures with a more concise variant:
-
-```php
-array_filter($array, ($item) => {
-    return !empty($item);
-});
-```
-
-Short closures require both the parameter parenthesis, and the function body braces. They do not allow optional parameter parenthesis, or implicit returns and braces.
-
-They also automatically transfer variables in the parent scope, using the built-in `get_defined_vars` and `extract` functions. Be aware of how your functions are compiled - it's a significant change from what you're used to, with traditional PHP!
-
-## Testing
-
-There are a few tests, to make sure short closures are compiled to syntactically valid PHP functions. You can run these tests with:
-
-```
-vendor/bin/phpunit
-```
-
-This assumes you've cloned this repository and run `composer install` beforehand.
+Documentation can be found at [preprocess.io](https://preprocess.io/docs#short-closures).
 
 ## Versioning
 
