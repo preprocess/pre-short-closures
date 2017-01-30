@@ -1,7 +1,7 @@
 <?php
 
-macro {
-    (···parameters) => { ···body }
+macro ·recursion {
+    (···parameters) => {···body}
 } >> {
     call_user_func(function($context) {
         return function(···parameters) use ($context) {
