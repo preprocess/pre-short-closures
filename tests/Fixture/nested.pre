@@ -1,0 +1,11 @@
+<?php
+
+$cb = () => {
+    return () => {
+        return () => {
+            return "hello world";
+        };
+    };
+};
+
+return $cb()()();

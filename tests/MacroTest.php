@@ -23,7 +23,7 @@ class MacroTest extends TestCase
         $pre = __DIR__ . "/Fixture/nested.pre";
         $php = __DIR__ . "/Fixture/nested.php";
 
-        process($base, $pre, $php);
+        process($pre, $php);
 
         $this->assertEquals("hello world", require $php);
     }
