@@ -1,6 +1,12 @@
 <?php
 
 macro ·recursion {
+    * (···parameters) => {···body}
+} >> {
+    async function(···parameters) {···body}
+}
+
+macro ·recursion {
     (···parameters) => {···body}
 } >> {
     call_user_func(function($context) {
