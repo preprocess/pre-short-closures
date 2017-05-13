@@ -6,9 +6,10 @@ Test short closure macros
 
 class Fixture
 {
-    public function foo($end) {
+    public function foo($end, $thing) {
         return ($name) => {
-            return "hello {$name}{$end}";
+            $this->something();
+            return "hello {$name}{$end}{$thing}";
         };
     }
 }
@@ -17,13 +18,11 @@ class Fixture
 
 class Fixture
 {
-    public function foo($end)
+    public function foo($end, $thing)
     {
-        return call_user_func(function ($context·0) {
-            return function ($name) use ($context·0) {
-                extract($context·0);
-                return "hello {$name}{$end}";
-            };
-        }, get_defined_vars());
+        return [$end = $end ?? null, $thing = $thing ?? null, "fn" => function ($name) use (&$end, &$thing) {
+            $this->something();
+            return "hello {$name}{$end}{$thing}";
+        }]["fn"];
     }
 }

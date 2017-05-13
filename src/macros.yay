@@ -1,0 +1,94 @@
+<?php
+
+macro ·recursion {
+    ·chain(
+        ·token("("),
+        ·optional(
+            ·ls(
+                ·chain(
+                    ·optional(·ns())·argType,
+                    ·token(T_VARIABLE)·argName,
+                    ·optional(
+                        ·chain(
+                            ·token("="),
+                            ·either(
+                                ·ns(),
+                                ·token(T_CONSTANT_ENCAPSED_STRING),
+                                ·token(T_LNUMBER),
+                                ·token(T_DNUMBER),
+                                ·token(T_STRING)
+                            )
+                        )
+                    )·argAssignment
+                )·arg,
+                ·token(",")
+            )
+        )·args,
+        ·token(")"),
+        ·optional(
+            ·chain(
+                ·token(":"),
+                ·ns()
+            )
+        )·returnType,
+        ·token(T_DOUBLE_ARROW),
+        ·token("{"),
+        ·layer()·body,
+        ·token("}"),
+        ·_()·scope,
+        ·_()·simple
+    )
+} >> function($ast) {
+    $defined = [];
+
+    foreach ($ast->{"·args"} as $node) {
+        $name = (string) $node["·arg"]["·argName"];
+        $defined[$name] = true;
+    }
+
+    $bound = false;
+    $scope = new \Yay\Ast("·scope");
+
+    $pushed = [];
+
+    foreach ($ast->{"·body"} as $token) {
+        $name = $token->value();
+
+        if (!$token->is(T_VARIABLE)) {
+            continue;
+        }
+
+        if (isset($defined[$name]) || isset($pushed[$name])) {
+            continue;
+        }
+
+        if (substr($name, 1) === "this") {
+            continue;
+        }
+
+        $scope->push(new \Yay\Ast("·var", $token));
+        $pushed[$name] = true;
+        $bound = true;
+    }
+
+    if ($bound) {
+      $ast->append($scope);
+    } else {
+      $simple = new \Yay\Ast("·simple");
+      $simple->push(new \Yay\Ast());
+
+      $ast->append($simple);
+    }
+} >> {··trim(
+    ·scope ?·{
+        [·scope ···(, ) { ·var = ·var ?? null}, "fn" => function (·args ···(, ) { ·arg ··· { ·argType ·argName ·argAssignment } }) use (·scope ···(, ) { &·var }) ·returnType {
+            ·body
+        }]["fn"]
+    }
+
+    ·simple ?·{
+        function (·args ···(, ) { ·arg ··· { ·argType ·argName ·argAssignment } }) ·returnType {
+            ·body
+        }
+    }
+)}

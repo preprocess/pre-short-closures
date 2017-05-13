@@ -12,21 +12,34 @@ $cb = () => {
     };
 };
 
+$foo = "hello";
+$bar = "world";
+
+$cb = () => {
+    return () => {
+        return () => {
+            print $foo . $bar;
+        };
+    };
+};
+
 --EXPECT--
 
-$cb = call_user_func(function ($context·0) {
-    return function () use ($context·0) {
-        extract($context·0);
-        return call_user_func(function ($context·1) {
-            return function () use ($context·1) {
-                extract($context·1);
-                return call_user_func(function ($context·2) {
-                    return function () use ($context·2) {
-                        extract($context·2);
-                        return "hello world";
-                    };
-                }, get_defined_vars());
-            };
-        }, get_defined_vars());
+$cb = function () {
+    return function () {
+        return function () {
+            return "hello world";
+        };
     };
-}, get_defined_vars());
+};
+
+$foo = "hello";
+$bar = "world";
+
+$cb = [$foo = $foo ?? null, $bar = $bar ?? null, "fn" => function () use (&$foo, &$bar) {
+    return [$foo = $foo ?? null, $bar = $bar ?? null, "fn" => function () use (&$foo, &$bar) {
+        return [$foo = $foo ?? null, $bar = $bar ?? null, "fn" => function () use (&$foo, &$bar) {
+            print $foo . $bar;
+        }]["fn"];
+    }]["fn"];
+}]["fn"];
