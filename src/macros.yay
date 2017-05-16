@@ -6,20 +6,22 @@ macro ·recursion {
         ·optional(
             ·ls(
                 ·chain(
-                    ·optional(·ns())·argType,
+                    ·optional(·either(
+                        ·ns(),
+                        ·token(T_ARRAY)
+                    ))·argType,
                     ·token(T_VARIABLE)·argName,
-                    ·optional(
+                    ·optional(·token("="))·argAssignmentEq,
+                    ·optional(·either(
+                        ·ns(),
+                        ·token(T_CONSTANT_ENCAPSED_STRING),
+                        ·token(T_LNUMBER),
+                        ·token(T_DNUMBER),
+                        ·token(T_STRING),
                         ·chain(
-                            ·token("="),
-                            ·either(
-                                ·ns(),
-                                ·token(T_CONSTANT_ENCAPSED_STRING),
-                                ·token(T_LNUMBER),
-                                ·token(T_DNUMBER),
-                                ·token(T_STRING)
-                            )
+                            ·token("["), ·layer(), ·token("]")
                         )
-                    )·argAssignment
+                    ))·argAssignmentVal
                 )·arg,
                 ·token(",")
             )
@@ -81,14 +83,14 @@ macro ·recursion {
     }
 } >> {··trim(
     ·scope ?·{
-        [·scope ···(, ) { ·var = ·var ?? null}, "fn" => function (·args ···(, ) { ·arg ··· { ·argType ·argName ·argAssignment } }) use (·scope ···(, ) { &·var }) ·returnType {
-            ·body
+        [·scope ···(, ) { ·var = ·var ?? null}, "fn" => ··trim(function (·args ···(, ) {··trim(·arg ··· { ·argType ·argName ·argAssignmentEq ·argAssignmentVal } )}) use (··trim(·scope ···(, ) {&·var})) ·returnType) {
+            ··trim(·body)
         }]["fn"]
     }
 
     ·simple ?·{
-        function (·args ···(, ) { ·arg ··· { ·argType ·argName ·argAssignment } }) ·returnType {
-            ·body
+        ··trim(function (·args ···(, ) {··trim(·arg ··· { ·argType ·argName ·argAssignmentEq ·argAssignmentVal } )}) ·returnType) {
+            ··trim(·body)
         }
     }
 )}

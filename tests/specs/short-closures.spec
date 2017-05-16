@@ -6,13 +6,18 @@ Test short closure macros
 
 class Fixture
 {
-    public function foo($end, $thing) {
+    public function foo($end, $thing)
+    {
         return ($name) => {
             $this->something();
             return "hello {$name}{$end}{$thing}";
         };
     }
 }
+
+$thing = (array $args = []) => {
+    print_r($args);
+};
 
 --EXPECT--
 
@@ -26,3 +31,7 @@ class Fixture
         }]["fn"];
     }
 }
+
+$thing = function (array $args = []) {
+    print_r($args);
+};
