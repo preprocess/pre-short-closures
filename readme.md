@@ -1,3 +1,3 @@
-# Pre Short Closures
+# Short Closures
 
-Documentation can be found at [preprocess.io](https://preprocess.io/docs#short-closures).
+Documentation can be found at [preprocess.io](https://preprocess.io#short-closures).
