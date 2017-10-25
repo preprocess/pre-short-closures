@@ -8,7 +8,8 @@ macro ·recursion {
                 ·chain(
                     ·optional(·either(
                         ·ns(),
-                        ·token(T_ARRAY)
+                        ·token(T_ARRAY),
+                        ·token(T_CALLABLE)
                     ))·argType,
                     ·token(T_VARIABLE)·argName,
                     ·optional(·token("="))·argAssignmentEq,
