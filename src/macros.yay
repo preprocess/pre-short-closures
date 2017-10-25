@@ -30,7 +30,10 @@ macro ·recursion {
         ·optional(
             ·chain(
                 ·token(":"),
-                ·ns()
+                ·either(
+                    ·ns(),
+                    ·token(T_ARRAY)
+                )
             )
         )·returnType,
         ·token(T_DOUBLE_ARROW),
