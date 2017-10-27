@@ -1,9 +1,3 @@
---DESCRIPTION--
-
-Test short closure macros
-
---GIVEN--
-
 class Fixture
 {
     public function foo($end, $thing)
@@ -15,11 +9,7 @@ class Fixture
     }
 }
 
-$thing = (array $args = []) => {
-    print_r($args);
-};
-
---EXPECT--
+~~~
 
 class Fixture
 {
@@ -31,6 +21,14 @@ class Fixture
         }]["fn"];
     }
 }
+
+---
+
+$thing = (array $args = []) => {
+    print_r($args);
+};
+
+~~~
 
 $thing = function (array $args = []) {
     print_r($args);

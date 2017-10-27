@@ -2,20 +2,21 @@
     "type": "pre-macro",
     "name": "pre/short-closures",
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../pre-plugin"
+        }
+    ],
     "require": {
-        "pre/plugin": "^0.7.3"
+        "pre/plugin": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.0|^6.0"
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Pre\\ShortClosures\\": "tests"
-        }
-    },
     "extra": {
-        "macros": [
-            "src/macros.yay"
-        ]
-    }
+        "macros": ["source/macros.yay"]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
