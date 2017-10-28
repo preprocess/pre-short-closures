@@ -1,9 +1,3 @@
---DESCRIPTION--
-
-Test short closure recursion
-
---GIVEN--
-
 $cb = () => {
     return () => {
         return () => {
@@ -11,6 +5,18 @@ $cb = () => {
         };
     };
 };
+
+~~~
+
+$cb = function () {
+    return function () {
+        return function () {
+            return "hello world";
+        };
+    };
+};
+
+---
 
 $foo = "hello";
 $bar = "world";
@@ -23,15 +29,7 @@ $cb = () => {
     };
 };
 
---EXPECT--
-
-$cb = function () {
-    return function () {
-        return function () {
-            return "hello world";
-        };
-    };
-};
+~~~
 
 $foo = "hello";
 $bar = "world";
