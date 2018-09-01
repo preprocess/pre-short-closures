@@ -1,64 +1,53 @@
 <?php
 
-macro ·recursion {
-    ·chain(
-        ·token("("),
-        ·optional(
-            ·ls(
-                ·chain(
-                    ·optional(·either(
-                        ·ns(),
-                        ·token(T_ARRAY),
-                        ·token(T_CALLABLE)
-                    ))·argType,
-                    ·token(T_VARIABLE)·argName,
-                    ·optional(·token("="))·argAssignmentEq,
-                    ·optional(·either(
-                        ·ns(),
-                        ·token(T_CONSTANT_ENCAPSED_STRING),
-                        ·token(T_LNUMBER),
-                        ·token(T_DNUMBER),
-                        ·token(T_STRING),
-                        ·chain(
-                            ·token("["), ·layer(), ·token("]")
-                        )
-                    ))·argAssignmentVal
-                )·arg,
-                ·token(",")
+$(macro :recursion) {
+    $(chain(
+        token("("),
+        optional(
+            ls(
+                chain(
+                    optional(either(
+                        ns(),
+                        token(T_ARRAY),
+                        token(T_CALLABLE)
+                    ) as argType),
+                    token(T_VARIABLE) as argName,
+                    optional(token("=") as argAssignmentEq),
+                    optional(expression() as argAssignmentVal)
+                ) as arg,
+                token(",")
             )
-        )·args,
-        ·token(")"),
-        ·optional(
-            ·chain(
-                ·token(":"),
-                ·either(
-                    ·ns(),
-                    ·token(T_ARRAY),
-                    ·token(T_CALLABLE)
-                )
+        ) as args,
+        token(")"),
+        optional(chain(
+            token(":"),
+            either(
+                ns(),
+                token(T_ARRAY),
+                token(T_CALLABLE)
             )
-        )·returnType,
-        ·token(T_DOUBLE_ARROW),
-        ·token("{"),
-        ·layer()·body,
-        ·token("}"),
-        ·_()·scope,
-        ·_()·simple
-    )
+        ) as returnType),
+        token(T_DOUBLE_ARROW),
+        token("{"),
+        layer() as body,
+        token("}"),
+        _() as scope,
+        _() as simple
+    ))
 } >> function($ast) {
     $defined = [];
 
-    foreach ($ast->{"·args"} as $node) {
-        $name = (string) $node["·arg"]["·argName"];
+    foreach ($ast->{"args"} as $node) {
+        $name = (string) $node["arg"]["argName"];
         $defined[$name] = true;
     }
 
     $bound = false;
-    $scope = new \Yay\Ast("·scope");
+    $scope = new \Yay\Ast("scope");
 
     $pushed = [];
 
-    foreach ($ast->{"·body"} as $token) {
+    foreach ($ast->{"body"} as $token) {
         $name = $token->value();
 
         if (!$token->is(T_VARIABLE)) {
@@ -73,7 +62,7 @@ macro ·recursion {
             continue;
         }
 
-        $scope->push(new \Yay\Ast("·var", $token));
+        $scope->push(new \Yay\Ast("var", $token));
         $pushed[$name] = true;
         $bound = true;
     }
@@ -81,21 +70,21 @@ macro ·recursion {
     if ($bound) {
       $ast->append($scope);
     } else {
-      $simple = new \Yay\Ast("·simple");
+      $simple = new \Yay\Ast("simple");
       $simple->push(new \Yay\Ast());
 
       $ast->append($simple);
     }
-} >> {··trim(
-    ·scope ?·{
-        [·scope ···(, ) { ·var = ·var ?? null}, "fn" => ··trim(function (·args ···(, ) {··trim(·arg ··· { ·argType ·argName ·argAssignmentEq ·argAssignmentVal } )}) use (··trim(·scope ···(, ) {&·var})) ·returnType) {
-            ··trim(·body)
+} >> {$$(trim(
+    $(scope ? {
+        [$(scope ... (, ) {$$(trim($(var) = $(var) ?? null))}), "fn" => function($(args ... (, ) {$$(trim( $(arg ... {$(argType) $(argName) $(argAssignmentEq) $(argAssignmentVal)}) ))})) use ($(scope ... (, ) {&$(var)})) $(returnType) {
+            $$(trim($(body)))
         }]["fn"]
-    }
+    })
 
-    ·simple ?·{
-        ··trim(function (·args ···(, ) {··trim(·arg ··· { ·argType ·argName ·argAssignmentEq ·argAssignmentVal } )}) ·returnType) {
-            ··trim(·body)
+    $(simple ? {
+        function($(args ... (, ) {$(args ... (, ) {$$(trim( $(arg ... {$(argType) $(argName) $(argAssignmentEq) $(argAssignmentVal)}) ))})})) $(returnType) {
+            $$(trim($(body)))
         }
-    }
-)}
+    })
+))}
