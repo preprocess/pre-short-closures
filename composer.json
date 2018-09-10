@@ -8,7 +8,7 @@
         ]
     },
     "require": {
-        "pre/plugin": "*"
+        "pre/plugin": "^0.11.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.0|^6.0"
@@ -17,16 +17,5 @@
         "macros": [
             "source/macros.yay"
         ]
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../pre-plugin",
-            "options": {
-                "symlink": false
-            }
-        }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
