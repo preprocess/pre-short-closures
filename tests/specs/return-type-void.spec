@@ -1,7 +1,7 @@
-$fn = ($x) :void => { error_log($x); };
+$fn = ($x): void ~> { error_log($x); };
 
 ~~~
 
-$fn = function ($x) :void {
+$fn = function ($x): void {
     error_log($x);
 };

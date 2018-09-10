@@ -2,6 +2,11 @@
     "type": "pre-macro",
     "name": "pre/short-closures",
     "license": "MIT",
+    "autoload": {
+        "files": [
+            "source/functions.php"
+        ]
+    },
     "require": {
         "pre/plugin": "*"
     },

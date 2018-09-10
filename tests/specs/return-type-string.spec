@@ -1,7 +1,7 @@
-$fn = ($x) :string => { return $x . 'x'; };
+$fn = ($x): string ~> { return $x . 'x'; };
 
 ~~~
 
-$fn = function ($x) :string {
+$fn = function ($x): string {
     return $x . 'x';
 };

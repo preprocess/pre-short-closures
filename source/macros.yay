@@ -2,88 +2,101 @@
 
 $(macro :recursion) {
     $(chain(
-        token("("),
-        optional(
-            ls(
-                chain(
-                    optional(either(
-                        ns(),
-                        token(T_ARRAY),
-                        token(T_CALLABLE)
-                    ) as argType),
-                    token(T_VARIABLE) as argName,
-                    optional(token("=") as argAssignmentEq),
-                    optional(expression() as argAssignmentVal)
-                ) as arg,
-                token(",")
-            )
-        ) as args,
-        token(")"),
-        optional(chain(
-            token(":"),
-            either(
-                ns(),
-                token(T_ARRAY),
-                token(T_CALLABLE)
-            )
-        ) as returnType),
-        token(T_DOUBLE_ARROW),
-        token("{"),
+        buffer("("),
+        functionArguments(),
+        buffer(")"),
+        functionReturn(),
+        buffer("~>"),
+        buffer("{"),
         layer() as body,
-        token("}"),
-        _() as scope,
-        _() as simple
+        buffer("}"),
+        _() as scope
     ))
 } >> function($ast) {
-    $defined = [];
-
-    foreach ($ast->{"args"} as $node) {
-        $name = (string) $node["arg"]["argName"];
-        $defined[$name] = true;
-    }
-
-    $bound = false;
-    $scope = new \Yay\Ast("scope");
-
-    $pushed = [];
-
-    foreach ($ast->{"body"} as $token) {
-        $name = $token->value();
-
-        if (!$token->is(T_VARIABLE)) {
-            continue;
-        }
-
-        if (isset($defined[$name]) || isset($pushed[$name])) {
-            continue;
-        }
-
-        if (substr($name, 1) === "this") {
-            continue;
-        }
-
-        $scope->push(new \Yay\Ast("var", $token));
-        $pushed[$name] = true;
-        $bound = true;
-    }
-
-    if ($bound) {
-      $ast->append($scope);
-    } else {
-      $simple = new \Yay\Ast("simple");
-      $simple->push(new \Yay\Ast());
-
-      $ast->append($simple);
-    }
+    return \Pre\ShortClosures\closure($ast, $implicit = false);
 } >> {$$(trim(
     $(scope ? {
-        [$(scope ... (, ) {$$(trim($(var) = $(var) ?? null))}), "fn" => function($(args ... (, ) {$$(trim( $(arg ... {$(argType) $(argName) $(argAssignmentEq) $(argAssignmentVal)}) ))})) use ($(scope ... (, ) {&$(var)})) $(returnType) {
+        [$(scope ... (, ) {$(var) = $(var) ?? null}), "fn" => function($(functionArguments ... (, ) { $$(functionArgument($(functionArgument))) })) use ($(scope ... (, ) {&$(var)}))$$(functionReturn($(functionReturn))) {
             $$(trim($(body)))
         }]["fn"]
     })
 
-    $(simple ? {
-        function($(args ... (, ) {$(args ... (, ) {$$(trim( $(arg ... {$(argType) $(argName) $(argAssignmentEq) $(argAssignmentVal)}) ))})})) $(returnType) {
+    $(scope ! {
+        function($(functionArguments ... (, ) { $$(functionArgument($(functionArgument))) }))$$(functionReturn($(functionReturn))) {
+            $$(trim($(body)))
+        }
+    })
+))}
+
+$(macro :recursion) {
+    $(chain(
+        buffer("("),
+        functionArguments(),
+        buffer(")"),
+        functionReturn(),
+        buffer("~>"),
+        expression() as body,
+        _() as scope
+    ))
+} >> function($ast) {
+    return \Pre\ShortClosures\closure($ast, $implicit = false);
+} >> {$$(trim(
+    $(scope ? {
+        [$(scope ... (, ) {$(var) = $(var) ?? null}), "fn" => function($(functionArguments ... (, ) { $$(functionArgument($(functionArgument))) })) use ($(scope ... (, ) {&$(var)}))$$(functionReturn($(functionReturn))) {
+            return $$(trim($(body)));
+        }]["fn"]
+    })
+
+    $(scope ! {
+        function($(functionArguments ... (, ) { $$(functionArgument($(functionArgument))) }))$$(functionReturn($(functionReturn))) {
+            return $$(trim($(body)));
+        }
+    })
+))}
+
+$(macro :recursion) {
+    $(chain(
+        token(T_VARIABLE) as functionArgumentName,
+        buffer("~>"),
+        expression() as body,
+        _() as scope
+    ))
+} >> function($ast) {
+    return \Pre\ShortClosures\closure($ast, $implicit = true);
+} >> {$$(trim(
+    $(scope ? {
+        [$(scope ... (, ) {$(var) = $(var) ?? null}), "fn" => function($(functionArgumentName)) use ($(scope ... (, ) {&$(var)})) {
+            return $$(trim($(body)));
+        }]["fn"]
+    })
+
+    $(scope ! {
+        function($(functionArgumentName)) {
+            return $$(trim($(body)));
+        }
+    })
+))}
+
+$(macro :recursion) {
+    $(chain(
+        token(T_VARIABLE) as functionArgumentName,
+        buffer("~>"),
+        token("{"),
+        layer() as body,
+        token("}"),
+        _() as scope
+    ))
+} >> function($ast) {
+    return \Pre\ShortClosures\closure($ast, $implicit = true);
+} >> {$$(trim(
+    $(scope ? {
+        [$(scope ... (, ) {$(var) = $(var) ?? null}), "fn" => function($(functionArgumentName)) use ($(scope ... (, ) {&$(var)})) {
+            $$(trim($(body)))
+        }]["fn"]
+    })
+
+    $(scope ! {
+        function($(functionArgumentName)) {
             $$(trim($(body)))
         }
     })
