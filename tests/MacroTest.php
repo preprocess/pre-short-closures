@@ -27,6 +27,7 @@ class MacroTest extends TestCase
 
         $files = [
             __DIR__ . "/specs/arg-type-callable.spec",
+            __DIR__ . "/specs/examples.spec",
             __DIR__ . "/specs/expression-bodies.spec",
             __DIR__ . "/specs/recursion.spec",
             __DIR__ . "/specs/return-type-array.spec",

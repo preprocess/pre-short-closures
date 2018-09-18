@@ -1,10 +1,3 @@
-# Short Closures
-
-Documentation can be found at [preprocess.io](https://preprocess.io#short-closures).
-
-You can use closures with similar semantics to Javascript:
-
-```php
 $files = array_map(
     $path ~> file_get_contents($path), $paths
 );
@@ -24,11 +17,9 @@ $matches = array_filter($files, ($content = "") ~> {
 
     return false;
 });
-```
 
-These are converted to:
+~~~
 
-```php
 $files = array_map(
     function ($path) {
         return file_get_contents($path);
@@ -51,4 +42,3 @@ $matches = array_filter($files, [$needles = $needles ?? null, $needle = $needle 
 
     return false;
 }]["fn"]);
-```
