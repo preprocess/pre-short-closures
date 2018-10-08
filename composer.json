@@ -8,7 +8,7 @@
         ]
     },
     "require": {
-        "pre/plugin": "^0.11.0"
+        "pre/plugin": "^0.11.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.0|^6.0"

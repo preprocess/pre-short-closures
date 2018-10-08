@@ -20,25 +20,25 @@ $matches = array_filter($files, ($content = "") ~> {
 
 ~~~
 
-$files = array_map(
-    function ($path) {
-        return file_get_contents($path);
-    },
-    $paths
-);
+$files = array_map(function ($path) {
+    return file_get_contents($path);
+}, $paths);
 
-$needles = [
-    "PHP",
-    "Go",
-    "Javascript",
-];
+$needles = ["PHP", "Go", "Javascript"];
 
-$matches = array_filter($files, [$needles = $needles ?? null, $needle = $needle ?? null, "fn" => function ($content = "") use (&$needles, &$needle) {
-    foreach ($needles as $needle) {
-        if (stristr($content, $needle)) {
-            return true;
+$matches = array_filter(
+    $files,
+    [
+        ($needles = $needles ?? null),
+        ($needle = $needle ?? null),
+        "fn" => function ($content = "") use (&$needles, &$needle) {
+            foreach ($needles as $needle) {
+                if (stristr($content, $needle)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
-    }
-
-    return false;
-}]["fn"]);
+    ]["fn"]
+);
