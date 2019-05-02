@@ -1,5 +1,5 @@
 $files = array_map(
-    $path ~> file_get_contents($path), $paths
+    fn($path) => file_get_contents($path), $paths
 );
 
 $needles = [
@@ -8,7 +8,7 @@ $needles = [
     "Javascript",
 ];
 
-$matches = array_filter($files, ($content = "") ~> {
+$matches = array_filter($files, fn($content = "") => {
     foreach ($needles as $needle) {
         if (stristr($content, $needle)) {
             return true;

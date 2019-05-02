@@ -1,4 +1,4 @@
-$fn = ($x): callable ~> { return () ~> { return $x; }; };
+$fn = fn($x): callable => { return fn() => { return $x; }; };
 
 ~~~
 

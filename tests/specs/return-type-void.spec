@@ -1,4 +1,4 @@
-$fn = ($x): void ~> { error_log($x); };
+$fn = fn($x): void => { error_log($x); };
 
 ~~~
 

@@ -1,4 +1,4 @@
-$fn = ($x): array ~> { return explode(', ', $x); };
+$fn = fn($x): array => { return explode(', ', $x); };
 
 ~~~
 

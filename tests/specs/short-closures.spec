@@ -2,7 +2,7 @@ class Fixture
 {
     public function foo($end, $thing)
     {
-        return ($name) ~> {
+        return fn($name) => {
             $this->something();
             return "hello {$name}{$end}{$thing}";
         };
@@ -28,7 +28,7 @@ class Fixture
 
 ---
 
-$thing = (array $args = []) ~> {
+$thing = fn(array $args = []) => {
     print_r($args);
 };
 

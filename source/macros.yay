@@ -2,11 +2,12 @@
 
 $(macro :recursion) {
     $(chain(
+        buffer("fn"),
         buffer("("),
         functionArguments(),
         buffer(")"),
         functionReturn(),
-        buffer("~>"),
+        buffer("=>"),
         buffer("{"),
         layer() as body,
         buffer("}"),
@@ -30,11 +31,11 @@ $(macro :recursion) {
 
 $(macro :recursion) {
     $(chain(
+        buffer("fn"),
         buffer("("),
         functionArguments(),
         buffer(")"),
-        functionReturn(),
-        buffer("~>"),
+        buffer("=>"),
         expression() as body,
         _() as scope
     ))
@@ -42,62 +43,14 @@ $(macro :recursion) {
     return \Pre\ShortClosures\closure($ast, $implicit = false);
 } >> {$$(trim(
     $(scope ? {
-        [$(scope ... (, ) {$(var) = $(var) ?? null}), "fn" => function($(functionArguments ... (, ) { $$(functionArgument($(functionArgument))) })) use ($(scope ... (, ) {&$(var)}))$$(functionReturn($(functionReturn))) {
+        [$(scope ... (, ) {$(var) = $(var) ?? null}), "fn" => function($(functionArguments ... (, ) { $$(functionArgument($(functionArgument))) })) use ($(scope ... (, ) {&$(var)})) {
             return $$(trim($(body)));
         }]["fn"]
     })
 
     $(scope ! {
-        function($(functionArguments ... (, ) { $$(functionArgument($(functionArgument))) }))$$(functionReturn($(functionReturn))) {
+        function($(functionArguments ... (, ) { $$(functionArgument($(functionArgument))) })) {
             return $$(trim($(body)));
-        }
-    })
-))}
-
-$(macro :recursion) {
-    $(chain(
-        token(T_VARIABLE) as functionArgumentName,
-        buffer("~>"),
-        expression() as body,
-        _() as scope
-    ))
-} >> function($ast) {
-    return \Pre\ShortClosures\closure($ast, $implicit = true);
-} >> {$$(trim(
-    $(scope ? {
-        [$(scope ... (, ) {$(var) = $(var) ?? null}), "fn" => function($(functionArgumentName)) use ($(scope ... (, ) {&$(var)})) {
-            return $$(trim($(body)));
-        }]["fn"]
-    })
-
-    $(scope ! {
-        function($(functionArgumentName)) {
-            return $$(trim($(body)));
-        }
-    })
-))}
-
-$(macro :recursion) {
-    $(chain(
-        token(T_VARIABLE) as functionArgumentName,
-        buffer("~>"),
-        token("{"),
-        layer() as body,
-        token("}"),
-        _() as scope
-    ))
-} >> function($ast) {
-    return \Pre\ShortClosures\closure($ast, $implicit = true);
-} >> {$$(trim(
-    $(scope ? {
-        [$(scope ... (, ) {$(var) = $(var) ?? null}), "fn" => function($(functionArgumentName)) use ($(scope ... (, ) {&$(var)})) {
-            $$(trim($(body)))
-        }]["fn"]
-    })
-
-    $(scope ! {
-        function($(functionArgumentName)) {
-            $$(trim($(body)))
         }
     })
 ))}

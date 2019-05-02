@@ -1,6 +1,6 @@
-$cb = () ~> {
-    return () ~> {
-        return () ~> {
+$cb = fn() => {
+    return fn() => {
+        return fn() => {
             return "hello world";
         };
     };
@@ -21,9 +21,9 @@ $cb = function () {
 $foo = "hello";
 $bar = "world";
 
-$cb = () ~> {
-    return () ~> {
-        return () ~> {
+$cb = fn() => {
+    return fn() => {
+        return fn() => {
             print $foo . $bar;
         };
     };

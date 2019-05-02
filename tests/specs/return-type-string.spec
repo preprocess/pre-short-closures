@@ -1,4 +1,4 @@
-$fn = ($x): string ~> { return $x . 'x'; };
+$fn = fn($x): string => { return $x . 'x'; };
 
 ~~~
 

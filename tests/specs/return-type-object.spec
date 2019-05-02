@@ -1,4 +1,4 @@
-$fn = ($x): SomeClass ~> { return new SomeClass($x); };
+$fn = fn($x): SomeClass => { return new SomeClass($x); };
 
 ~~~
 
